@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title id="page-title">Portfolio - Chargement...</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600;700&family=Roboto:wght@300;400;500&display=swap" rel="stylesheet">
+    <link href="./src/style.css" rel="stylesheet">
+</head>
+<body class="bg-gradient-to-br from-primary-blue/10 via-primary-emerald/5 to-secondary-beige/10 min-h-screen" data-theme="light">
+    <!-- Dark Mode Toggle -->
+    <div class="theme-toggle" id="theme-toggle" title="Toggle Dark Mode">
+        <div class="sun-icon absolute">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <circle cx="12" cy="12" r="5" stroke="currentColor" stroke-width="2"/>
+                <path d="M12 1v2m0 18v2M4.22 4.22l1.42 1.42m12.72 12.72l1.42 1.42M1 12h2m18 0h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42" stroke="currentColor" stroke-width="2"/>
+            </svg>
+        </div>
+        <div class="moon-icon absolute opacity-0 scale-0">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" stroke="currentColor" stroke-width="2"/>
+            </svg>
+        </div>
+    </div>
+
+    <!-- Language Toggle -->
+    <div class="language-toggle" id="language-toggle" title="Switch Language">
+        <div class="flex items-center space-x-2">
+            <span class="lang-option active" data-lang="fr">FR</span>
+            <div class="w-px h-4 bg-current opacity-30"></div>
+            <span class="lang-option" data-lang="en">EN</span>
+        </div>
+    </div>
+
+    <!-- Theme & Language Toggles Container -->
+    <div class="fixed top-4 right-4 z-50 flex space-x-3">
+        <div class="sun-icon absolute">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <circle cx="12" cy="12" r="5" stroke="currentColor" stroke-width="2"/>
+                <path d="M12 1v2m0 18v2M4.22 4.22l1.42 1.42m12.72 12.72l1.42 1.42M1 12h2m18 0h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42" stroke="currentColor" stroke-width="2"/>
+            </svg>
+        </div>
+        <div class="moon-icon absolute opacity-0 scale-0">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" stroke="currentColor" stroke-width="2"/>
+            </svg>
+        </div>
+    </div>
+
+    <!-- Header -->
+    <header class="fixed top-0 left-0 right-0 z-40 backdrop-blur-md bg-white/10 border-b border-white/20">
+        <nav class="container mx-auto px-6 py-4">
+            <div class="flex items-center justify-between">
+                <div class="flex items-center space-x-4">
+                    <div id="header-avatar" class="w-12 h-12 rounded-full bg-gradient-to-r from-primary-blue to-primary-emerald flex items-center justify-center">
+                        <span id="header-initials" class="text-white font-montserrat font-bold text-lg">YK</span>
+                    </div>
+                    <div>
+                        <h1 id="header-name" class="font-montserrat font-bold text-xl text-primary">Youcef Kouaouci</h1>
+                        <p id="header-title" class="font-roboto text-sm text-secondary">Développeur / Architecte</p>
+                    </div>
+                </div>
+                
+                <!-- Navigation Desktop -->
+                <div class="hidden md:flex items-center space-x-8">
+                    <a href="#about" class="nav-link font-roboto transition-colors" data-translate="nav.about">À propos</a>
+                    <a href="#services" class="nav-link font-roboto transition-colors" data-translate="nav.services">Services</a>
+                    <a href="#projects" class="nav-link font-roboto transition-colors" data-translate="nav.projects">Projets</a>
+                    <a href="#roadmap" class="nav-link font-roboto transition-colors" data-translate="nav.roadmap">Parcours</a>
+                    <a href="#contact" class="glass-button px-6 py-2 rounded-full font-roboto font-medium text-primary-blue" data-translate="nav.contact">Contact</a>
+                </div>
+
+                <!-- Menu Burger -->
+                <button id="burger-menu" class="md:hidden flex flex-col space-y-1 p-2">
+                    <span class="w-6 h-0.5 bg-current transition-all duration-300"></span>
+                    <span class="w-6 h-0.5 bg-current transition-all duration-300"></span>
+                    <span class="w-6 h-0.5 bg-current transition-all duration-300"></span>
+                </button>
+            </div>
+
+            <!-- Menu Mobile -->
+            <div id="mobile-menu" class="md:hidden hidden mt-4 pb-4">
+                <div class="flex flex-col space-y-4">
+                    <a href="#about" class="nav-link font-roboto" data-translate="nav.about">À propos</a>
+                    <a href="#services" class="nav-link font-roboto" data-translate="nav.services">Services</a>
+                    <a href="#projects" class="nav-link font-roboto" data-translate="nav.projects">Projets</a>
+                    <a href="#roadmap" class="nav-link font-roboto" data-translate="nav.roadmap">Parcours</a>
+                    <a href="#contact" class="nav-link font-roboto" data-translate="nav.contact">Contact</a>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="pt-32 pb-20 px-6">
+        <div class="container mx-auto text-center">
+            <div class="glass-card p-12 rounded-3xl max-w-4xl mx-auto animate-fade-in">
+                <div id="hero-avatar" class="w-32 h-32 mx-auto mb-8 rounded-full bg-gradient-to-r from-primary-blue to-primary-emerald p-1">
+                    <div class="w-full h-full rounded-full bg-gray-200 flex items-center justify-center">
+                        <span id="hero-initials" class="text-4xl font-montserrat font-bold text-gray-600">YK</span>
+                    </div>
+                </div>
+                <h1 id="hero-name" class="font-montserrat font-bold text-5xl md:text-6xl text-primary mb-6">
+                    Youcef Kouaouci
+                </h1>
+                <p id="hero-title" class="font-montserrat text-2xl text-primary-blue mb-4">
+                    Développeur Fullstack & Architecte reconverti
+                </p>
+                <p id="hero-bio" class="font-roboto text-lg text-secondary max-w-2xl mx-auto mb-8">
+                    Je développe des outils numériques inspirés de l'architecture.
+                </p>
+                <div class="flex flex-wrap justify-center gap-4">
+                    <a href="#contact" class="glass-button-primary px-8 py-4 rounded-full font-roboto font-medium text-white inline-block hover:scale-105 transition-transform" data-translate="hero.cta">
+                        Collaborons ensemble
+                    </a>
+                    <a id="cv-link" href="#" target="_blank" class="glass-button px-8 py-4 rounded-full font-roboto font-medium text-primary-blue inline-block hover:scale-105 transition-transform" data-translate="hero.cv">
+                        Télécharger CV
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section id="about" class="py-20 px-6">
+        <div class="container mx-auto max-w-6xl">
+            <div class="text-center mb-16">
+                <h2 class="font-montserrat font-bold text-4xl text-primary mb-4" data-translate="about.title">À propos de moi</h2>
+                <div class="w-24 h-1 bg-gradient-to-r from-primary-blue to-primary-emerald mx-auto"></div>
+            </div>
+            
+            <div class="grid md:grid-cols-2 gap-12 items-center">
+                <div class="glass-card p-8 rounded-2xl">
+                    <h3 class="font-montserrat font-semibold text-2xl text-primary mb-6" data-translate="about.subtitle">Mon parcours hybride</h3>
+                    <p id="about-bio" class="font-roboto text-secondary mb-4 leading-relaxed">
+                        <!-- Bio longue sera injectée ici -->
+                    </p>
+                    <div class="mb-6">
+                        <p class="font-roboto text-secondary mb-2">
+                            <span class="font-semibold" data-translate="about.location">📍 Localisation :</span> 
+                            <span id="about-location">Sainte-Foy-lès-Lyon, France</span>
+                        </p>
+                    </div>
+                    <div id="skills-container" class="flex flex-wrap gap-3">
+                        <!-- Compétences techniques seront injectées ici -->
+                    </div>
+                </div>
+                
+                <div class="space-y-6">
+                    <div class="glass-card p-6 rounded-xl hover:scale-105 transition-transform">
+                        <div class="flex items-center mb-3">
+                            <div class="w-12 h-12 bg-primary-blue/20 rounded-lg flex items-center justify-center mr-4">
+                                <span class="text-2xl">🏗️</span>
+                            </div>
+                            <h4 class="font-montserrat font-semibold text-lg text-primary" data-translate="serviceCards.architecture.title">Architecture</h4>
+                        </div>
+                        <p class="font-roboto text-secondary text-sm" data-translate="serviceCards.architecture.description">Conception et planification de projets complexes</p>
+                    </div>
+                    
+                    <div class="glass-card p-6 rounded-xl hover:scale-105 transition-transform">
+                        <div class="flex items-center mb-3">
+                            <div class="w-12 h-12 bg-primary-emerald/20 rounded-lg flex items-center justify-center mr-4">
+                                <span class="text-2xl">💻</span>
+                            </div>
+                            <h4 class="font-montserrat font-semibold text-lg text-primary" data-translate="serviceCards.development.title">Développement</h4>
+                        </div>
+                        <p class="font-roboto text-secondary text-sm" data-translate="serviceCards.development.description">Solutions web modernes et performantes</p>
+                    </div>
+                    
+                    <div class="glass-card p-6 rounded-xl hover:scale-105 transition-transform">
+                        <div class="flex items-center mb-3">
+                            <div class="w-12 h-12 bg-secondary-sand/40 rounded-lg flex items-center justify-center mr-4">
+                                <span class="text-2xl">🎨</span>
+                            </div>
+                            <h4 class="font-montserrat font-semibold text-lg text-primary" data-translate="serviceCards.design.title">Design</h4>
+                        </div>
+                        <p class="font-roboto text-secondary text-sm" data-translate="serviceCards.design.description">Interfaces intuitives et esthétiques</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Services Section -->
+    <section id="services" class="py-20 px-6 bg-gradient-to-r from-primary-blue/5 to-primary-emerald/5">
+        <div class="container mx-auto max-w-6xl">
+            <div class="text-center mb-16">
+                <h2 class="font-montserrat font-bold text-4xl text-primary mb-4" data-translate="services.title">Mes Services</h2>
+                <div class="w-24 h-1 bg-gradient-to-r from-primary-blue to-primary-emerald mx-auto"></div>
+            </div>
+            
+            <div id="services-grid" class="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
+                <!-- Services seront injectés dynamiquement ici -->
+            </div>
+        </div>
+    </section>
+
+    <!-- Projects Section -->
+    <section id="projects" class="py-20 px-6">
+        <div class="container mx-auto max-w-7xl">
+            <div class="text-center mb-16">
+                <h2 class="font-montserrat font-bold text-4xl text-primary mb-4" data-translate="projects.title">Mes Projets</h2>
+                <div class="w-24 h-1 bg-gradient-to-r from-primary-blue to-primary-emerald mx-auto mb-8"></div>
+            </div>
+            
+            <!-- Filters -->
+            <div class="mb-12">
+                <div class="flex flex-wrap justify-center gap-4 mb-8">
+                    <button class="filter-btn active" data-filter="all" data-translate="projects.filters.all">Tous</button>
+                    <button class="filter-btn" data-filter="pro" data-translate="projects.filters.pro">Professionnel</button>
+                    <button class="filter-btn" data-filter="académique" data-translate="projects.filters.académique">Académique</button>
+                    <button class="filter-btn" data-filter="recherche" data-translate="projects.filters.recherche">Recherche</button>
+                </div>
+                
+                <div id="tech-filters" class="flex flex-wrap justify-center gap-2">
+                    <!-- Filtres technologiques seront générés dynamiquement -->
+                </div>
+            </div>
+            
+            <!-- Projects Grid -->
+            <div id="projects-grid" class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <!-- Projects seront injectés dynamiquement ici -->
+            </div>
+        </div>
+    </section>
+
+    <!-- Roadmap Section -->
+    <section id="roadmap" class="py-20 px-6 bg-gradient-to-r from-primary-emerald/5 to-primary-blue/5">
+        <div class="container mx-auto max-w-4xl">
+            <div class="text-center mb-16">
+                <h2 class="font-montserrat font-bold text-4xl text-primary mb-4" data-translate="roadmap.title">Mon Parcours</h2>
+                <div class="w-24 h-1 bg-gradient-to-r from-primary-blue to-primary-emerald mx-auto"></div>
+            </div>
+            
+            <div class="relative">
+                <div class="absolute left-1/2 transform -translate-x-px h-full w-0.5 bg-gradient-to-b from-primary-blue to-primary-emerald"></div>
+                
+                <div id="roadmap-container">
+                    <!-- Parcours sera injecté dynamiquement ici -->
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Tech Stack Section -->
+    <section class="py-20 px-6">
+        <div class="container mx-auto max-w-6xl">
+            <div class="text-center mb-16">
+                <h2 class="font-montserrat font-bold text-4xl text-primary mb-4" data-translate="techStack.title">Technologies</h2>
+                <div class="w-24 h-1 bg-gradient-to-r from-primary-blue to-primary-emerald mx-auto"></div>
+            </div>
+            
+            <div id="tech-stack-grid" class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-8">
+                <!-- Technologies seront injectées dynamiquement ici -->
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer id="contact" class="py-20 px-6 bg-gradient-to-r from-gray-900 to-gray-800">
+        <div class="container mx-auto max-w-6xl">
+            <div class="grid md:grid-cols-2 gap-12 items-center">
+                <div>
+                    <h2 class="font-montserrat font-bold text-4xl text-white mb-6" data-translate="contact.title">Travaillons ensemble</h2>
+                    <p class="font-roboto text-gray-300 mb-8 leading-relaxed" data-translate="contact.subtitle">
+                        Vous avez un projet ? Une idée ? N'hésitez pas à me contacter pour discuter de vos besoins et voir comment nous pouvons collaborer.
+                    </p>
+                    <div id="social-links" class="flex space-x-6">
+                        <!-- Liens sociaux seront injectés dynamiquement ici -->
+                    </div>
+                </div>
+                
+                <div class="glass-card p-8 rounded-2xl">
+                    <form id="contact-form" class="space-y-6">
+                        <div>
+                            <input type="text" name="name" class="contact-input w-full" required data-translate-placeholder="contact.form.name">
+                        </div>
+                        <div>
+                            <input type="email" name="email" class="contact-input w-full" required data-translate-placeholder="contact.form.email">
+                        </div>
+                        <div>
+                            <textarea name="message" rows="4" class="contact-input w-full" required data-translate-placeholder="contact.form.message"></textarea>
+                        </div>
+                        <button type="submit" class="glass-button-primary w-full py-3 rounded-xl font-roboto font-medium text-white hover:scale-105 transition-transform" data-translate="contact.form.submit">
+                            Envoyer le message
+                        </button>
+                    </form>
+                </div>
+            </div>
+            
+            <div class="border-t border-gray-700 mt-12 pt-8 text-center">
+                <p id="footer-copyright" class="font-roboto text-gray-400" data-translate="footer.copyright">
+                    © 2024 Youcef Kouaouci. Tous droits réservés. Conçu avec passion ❤️
+                </p>
+            </div>
+        </div>
+    </footer>
+
+    <script type="module" src="./src/main.js"></script>
+</body>
+</html>

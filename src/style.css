@@ -431,3 +431,8 @@ html {
 }
 
 /* Responsive Adjustments */
+
+ul {
+  list-style-type: none;
+  padding-left: 0;
+}

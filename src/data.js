@@ -3,15 +3,15 @@ const dataPortfolio = {
     fr: {
       identité: {
         nom: "Youcef Kouaouci",
-        titre: "Développeur Web Fullstack (junior)",
+        titre: "Développeur Web Fullstack",
         bio_courte:
-          "Ancien Architecte reconverti dans le développement web, je crée des outils numériques innovants.",
+          "Ancien Architecte reconverti dans le développement informatique, je crée des outils numériques innovants.",
         bio_longue:
-          "Ancien Architecte, je me suis reconverti vers le développement informatique afin de me spécialiser dans la création d'outils d'aide à la décision et de logiciels de simulation et modélisation. Actuellement en formation de Développeur Web et Web Mobile chez Human Booster, je recherche une alternance (apprentissage) dès octobre 2025 pour consolider mes compétences et contribuer à des projets innovants.",
-        ville: "Sainte-Foy-Lès-Lyon, 69110",
+          "Ancien Architecte, je porte projet de reconversion vers le développement informatique afin de me spécialiser dans la création d'outils d'aide à la décision pour le secteur de construction. Actuellement en formation d'apprentissage de Développeur logiciel, je recherche une alternance (apprentissage) dès octobre 2025 pour consolider mes compétences et contribuer à des projets innovants.",
+        ville: "Sainte-Foy-Lès-Lyon, 69110 | Mobilité : France métropolitaine",
         email: "youcefkouaouci@gmail.com",
         telephone: "07 44 80 21 63",
-        linkedin: "https://linkedin.com/in/youcefkouaouci",
+        linkedin: "https://linkedin.com/in/youcef-kouaouci",
         github: "https://github.com/youcefkouaouci",
         website: "www.youcefkouaouci.com",
         cv_url: "./cv-youcef-kouaouci.pdf.pdf",

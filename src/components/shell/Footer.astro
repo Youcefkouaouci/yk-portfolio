@@ -1,0 +1,96 @@
+---
+import Icon from '../ui/Icon.vue';
+import { profile } from '../../data/profile';
+
+const year = new Date().getFullYear();
+---
+
+<footer class="statusbar">
+  <div class="statusbar-inner">
+    <div class="statusbar-group">
+      <span>© {year} {profile.name}</span>
+      <span class="flex items-center gap-0.5">
+        <a class="icon-btn" href={profile.github} target="_blank" rel="noopener"><Icon name="github" label="GitHub" /></a>
+        <a class="icon-btn" href={profile.linkedin} target="_blank" rel="noopener"><Icon name="linkedin" label="LinkedIn" /></a>
+        <a class="icon-btn" href={`mailto:${profile.email}`}><Icon name="mail" label="E-mail" /></a>
+      </span>
+    </div>
+
+    <div class="statusbar-group">
+      <div class="render-switch" role="radiogroup" aria-label="Rendu du site">
+        <label class="render-option">
+          <input type="radio" name="render" value="blueprint" />
+          <span class="half half-dev" aria-hidden="true"></span>V1 Blueprint
+        </label>
+        <label class="render-option">
+          <input type="radio" name="render" value="calque" checked />
+          <span class="half half-archi" aria-hidden="true"></span>V2 Calque
+        </label>
+      </div>
+      <button type="button" class="link-btn" data-open-dialog="legal">Mentions légales</button>
+      <button type="button" class="link-btn" data-open-dialog="credits">Crédits</button>
+    </div>
+  </div>
+
+  <dialog id="legal" class="os-window os-dialog" aria-labelledby="legal-title">
+    <div class="os-titlebar">
+      <span class="os-titlebar-icon"><Icon name="file-text" size={16} /></span>
+      <p class="os-filename" id="legal-title"><span class="os-filename-base">mentions_legales</span><span class="os-ext">.txt</span></p>
+      <div class="os-controls">
+        <button type="button" class="os-ctl os-ctl-close" data-close-dialog aria-label="Fermer les mentions légales"><Icon name="x" size={16} /></button>
+      </div>
+    </div>
+    <div class="os-content">
+      <h3>Éditeur</h3>
+      <p>{profile.name} — <a href={`mailto:${profile.email}`}>{profile.email}</a></p>
+      <h3>Hébergement</h3>
+      <p><span class="todo">À compléter : nom, adresse et téléphone de l'hébergeur.</span></p>
+      <h3>Données personnelles</h3>
+      <p>
+        Ce site ne dépose aucun cookie et ne collecte aucune donnée. Le rendu choisi (V1 ou V2) est seulement
+        mémorisé dans votre navigateur.
+      </p>
+      <h3>Propriété intellectuelle</h3>
+      <p>Textes, plans, rendus et code présentés ici sont la propriété de {profile.name}, sauf mention contraire.</p>
+    </div>
+  </dialog>
+
+  <dialog id="credits" class="os-window os-dialog" aria-labelledby="credits-title">
+    <div class="os-titlebar">
+      <span class="os-titlebar-icon"><Icon name="file-text" size={16} /></span>
+      <p class="os-filename" id="credits-title"><span class="os-filename-base">credits</span><span class="os-ext">.txt</span></p>
+      <div class="os-controls">
+        <button type="button" class="os-ctl os-ctl-close" data-close-dialog aria-label="Fermer les crédits"><Icon name="x" size={16} /></button>
+      </div>
+    </div>
+    <div class="os-content">
+      <h3>Conception et développement</h3>
+      <p>{profile.name}</p>
+      <h3>Typographies</h3>
+      <p>Geist (Vercel) et JetBrains Mono (JetBrains), sous licence SIL Open Font License 1.1.</p>
+      <h3>Icônes</h3>
+      <p>Lucide (licence ISC) et Simple Icons (CC0).</p>
+      <h3>Technique</h3>
+      <p>Construit avec Astro, Vue, Tailwind CSS et GSAP.</p>
+    </div>
+  </dialog>
+</footer>
+
+<script>
+  import { $theme, setTheme, type Theme } from '../../lib/theme';
+
+  const radios = Array.from(document.querySelectorAll<HTMLInputElement>('input[name="render"]'));
+  radios.forEach((r) => r.addEventListener('change', () => r.checked && setTheme(r.value as Theme)));
+  $theme.subscribe((t) => radios.forEach((r) => (r.checked = r.value === t)));
+
+  document.querySelectorAll<HTMLButtonElement>('[data-open-dialog]').forEach((btn) =>
+    btn.addEventListener('click', () => {
+      document.getElementById(btn.dataset.openDialog!)?.closest('dialog')?.showModal();
+    }),
+  );
+  document.querySelectorAll<HTMLDialogElement>('dialog.os-dialog').forEach((dlg) => {
+    dlg.querySelector('[data-close-dialog]')?.addEventListener('click', () => dlg.close());
+    // Clic sur le voile = fermer
+    dlg.addEventListener('click', (e) => e.target === dlg && dlg.close());
+  });
+</script>

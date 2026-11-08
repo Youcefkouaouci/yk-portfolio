@@ -1,0 +1,45 @@
+---
+import Icon from '../ui/Icon.vue';
+import LogoMark from '../ui/LogoMark.vue';
+import { profile } from '../../data/profile';
+import { ADDRESS_ROOT, windows } from '../../data/windows';
+
+const first = windows[0]!;
+---
+
+<header class="appbar">
+  <div class="appbar-inner">
+    <a class="lockup" href="#top" aria-label={`${profile.name}, ${profile.titles.dev} et ${profile.titles.archi} — haut de page`}>
+      <LogoMark size={38} />
+      <span>
+        <span class="lockup-name">{profile.name}</span>
+        <span class="lockup-titles">
+          <span data-side="dev"><span class="half half-dev" aria-hidden="true"></span>{profile.titles.dev}</span>
+          <span data-side="archi"><span class="half half-archi" aria-hidden="true"></span>{profile.titles.archi}</span>
+        </span>
+      </span>
+    </a>
+
+    <div class="addressbar" aria-hidden="true">
+      <Icon name="folder" size={15} />
+      <span class="addressbar-text">{ADDRESS_ROOT}<span class="addressbar-file" data-address>{first.file}</span></span>
+    </div>
+
+    <a class="btn btn-dev appbar-cta" href={`mailto:${profile.email}`}>
+      <Icon name="mail" size={16} />
+      <span class="appbar-cta-label">M'écrire</span>
+      <span class="sr-only">(ouvre votre messagerie)</span>
+    </a>
+  </div>
+</header>
+
+<script>
+  import { $active } from '../../lib/desktop';
+  import { windows } from '../../data/windows';
+
+  const target = document.querySelector<HTMLElement>('[data-address]');
+  $active.subscribe((id) => {
+    const w = windows.find((x) => x.id === id);
+    if (target && w) target.textContent = w.file + (w.folder ? '\\' : '');
+  });
+</script>

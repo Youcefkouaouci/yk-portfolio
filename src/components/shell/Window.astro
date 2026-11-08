@@ -1,0 +1,165 @@
+---
+/**
+ * Fenêtre du bureau youcef.os : barre de titre (icône, nom de fichier, contrôles
+ * Réduire / Agrandir / Fermer) + corps repliable. L'état vit dans src/lib/desktop.ts,
+ * partagé avec la barre des tâches.
+ */
+import Icon from '../ui/Icon.vue';
+import type { DesktopWindow } from '../../data/windows';
+
+interface Props {
+  window: DesktopWindow;
+  /** Nom lisible, utilisé pour les libellés accessibles des contrôles. */
+  title?: string;
+}
+
+const { window: w, title = w.label } = Astro.props;
+const dot = w.file.lastIndexOf('.');
+const base = !w.folder && dot > 0 ? w.file.slice(0, dot) : w.file;
+const ext = w.folder ? '\\' : dot > 0 ? w.file.slice(dot) : '';
+---
+
+<div class="os-slot" data-slot={w.id}>
+  <section
+    id={w.id}
+    class="os-window"
+    data-window={w.id}
+    data-accent={w.accent}
+    data-state="open"
+    tabindex="-1"
+    aria-labelledby={`${w.id}-title`}
+  >
+    <div class="os-titlebar" data-titlebar>
+      <span class="os-titlebar-icon"><Icon name={w.icon} size={16} /></span>
+      <p class="os-filename" aria-hidden="true">
+        <span class="os-filename-base">{base}</span><span class="os-ext">{ext}</span>
+      </p>
+      <div class="os-controls">
+        <button
+          type="button"
+          class="os-ctl"
+          data-action="minimize"
+          aria-label={`Réduire ${title}`}
+          aria-expanded="true"
+          aria-controls={`${w.id}-body`}
+          title="Réduire"
+        >
+          <Icon name="minus" size={16} />
+        </button>
+        <button type="button" class="os-ctl" data-action="maximize" aria-label={`Agrandir ${title}`} aria-pressed="false" title="Agrandir">
+          <span class="i-max"><Icon name="square" size={14} /></span>
+          <span class="i-restore"><Icon name="restore" size={14} /></span>
+        </button>
+        <button type="button" class="os-ctl os-ctl-close" data-action="close" aria-label={`Fermer ${title}`} title="Fermer">
+          <Icon name="x" size={16} />
+        </button>
+      </div>
+    </div>
+    <div class="os-body" id={`${w.id}-body`}>
+      <div class="os-body-inner">
+        <div class="os-content">
+          <slot />
+        </div>
+      </div>
+    </div>
+  </section>
+</div>
+
+<script>
+  import { $active, $windows, registerWindow, setWindowState, stateOf } from '../../lib/desktop';
+
+  const els = Array.from(document.querySelectorAll<HTMLElement>('[data-window]'));
+  let lastTrigger: HTMLElement | null = null;
+
+  for (const el of els) {
+    const id = el.dataset.window!;
+    registerWindow(id);
+
+    el.querySelector('.os-controls')?.addEventListener('click', (e) => {
+      const btn = (e.target as Element).closest<HTMLButtonElement>('[data-action]');
+      if (!btn) return;
+      const current = stateOf(id);
+      switch (btn.dataset.action) {
+        case 'minimize':
+          setWindowState(id, current === 'minimized' ? 'open' : 'minimized');
+          break;
+        case 'maximize':
+          lastTrigger = btn;
+          setWindowState(id, current === 'maximized' ? 'open' : 'maximized');
+          break;
+        case 'close':
+          setWindowState(id, 'closed');
+          document.getElementById('taskbar-start')?.focus();
+          break;
+      }
+    });
+
+    // Double-clic sur la barre de titre = agrandir / restaurer, comme sous Windows.
+    el.querySelector('[data-titlebar]')?.addEventListener('dblclick', (e) => {
+      if ((e.target as Element).closest('button')) return;
+      setWindowState(id, stateOf(id) === 'maximized' ? 'open' : 'maximized');
+    });
+  }
+
+  $windows.subscribe((states) => {
+    let anyMax = false;
+    for (const el of els) {
+      const id = el.dataset.window!;
+      const state = states[id] ?? 'open';
+      const prev = el.dataset.state;
+      const slot = el.parentElement as HTMLElement;
+      const body = el.querySelector<HTMLElement>('.os-body');
+      const minBtn = el.querySelector<HTMLButtonElement>('[data-action="minimize"]');
+      const maxBtn = el.querySelector<HTMLButtonElement>('[data-action="maximize"]');
+      const title = el.querySelector('[data-action="close"]')?.getAttribute('aria-label')?.replace(/^Fermer /, '') ?? id;
+
+      // Garde la place de la fenêtre dans le flux quand elle passe en plein écran.
+      if (state === 'maximized' && prev !== 'maximized') slot.style.minHeight = `${el.offsetHeight}px`;
+      if (state !== 'maximized') slot.style.minHeight = '';
+
+      el.dataset.state = state;
+      slot.hidden = state === 'closed';
+      if (body) body.inert = state === 'minimized';
+      minBtn?.setAttribute('aria-expanded', String(state !== 'minimized'));
+      maxBtn?.setAttribute('aria-pressed', String(state === 'maximized'));
+      maxBtn?.setAttribute('aria-label', `${state === 'maximized' ? 'Restaurer' : 'Agrandir'} ${title}`);
+      maxBtn?.setAttribute('title', state === 'maximized' ? 'Restaurer' : 'Agrandir');
+
+      if (state === 'maximized') {
+        anyMax = true;
+        if (prev !== 'maximized') requestAnimationFrame(() => el.focus({ preventScroll: true }));
+      } else if (prev === 'maximized' && lastTrigger && el.contains(lastTrigger)) {
+        lastTrigger.focus({ preventScroll: true });
+      }
+    }
+    document.documentElement.classList.toggle('has-maximized', anyMax);
+  });
+
+  document.addEventListener('keydown', (e) => {
+    if (e.key !== 'Escape') return;
+    for (const [id, s] of Object.entries($windows.get())) if (s === 'maximized') setWindowState(id, 'open');
+  });
+
+  // Fenêtre active = celle qui traverse la bande située vers 40 % de la hauteur d'écran.
+  // En bas de page, cette bande n'atteint jamais la dernière fenêtre : on la force.
+  const atBottom = () => window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 2;
+  const lastVisible = () => [...els].reverse().find((el) => el.dataset.state !== 'closed');
+  let inBand: string | null = null;
+  const pickActive = () => {
+    const id = atBottom() ? (lastVisible()?.dataset.window ?? inBand) : inBand;
+    if (id) $active.set(id);
+  };
+  const io = new IntersectionObserver(
+    (entries) => {
+      for (const entry of entries) if (entry.isIntersecting) inBand = (entry.target as HTMLElement).dataset.window!;
+      pickActive();
+    },
+    { rootMargin: '-38% 0px -58% 0px' },
+  );
+  els.forEach((el) => io.observe(el));
+  window.addEventListener('scroll', pickActive, { passive: true });
+
+  $active.subscribe((id) => {
+    for (const el of els) el.toggleAttribute('data-focused', el.dataset.window === id);
+  });
+</script>

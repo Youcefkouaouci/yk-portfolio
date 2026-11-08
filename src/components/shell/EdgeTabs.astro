@@ -1,0 +1,66 @@
+---
+import Icon from '../ui/Icon.vue';
+---
+
+<div class="edge-tabs" data-edge>
+  <button type="button" class="edge-tab edge-tab-top" data-to-top>
+    <Icon name="arrow-up" size={14} />Haut de page
+  </button>
+  <button type="button" class="edge-tab" data-share>
+    <Icon name="share" size={14} />Partager
+  </button>
+</div>
+<button type="button" class="fab-top" data-to-top data-fab aria-label="Revenir en haut de la page">
+  <Icon name="arrow-up" size={18} />
+</button>
+<p class="toast" role="status" aria-live="polite" data-toast></p>
+
+<script>
+  import { prefersReducedMotion } from '../../lib/desktop';
+
+  const edge = document.querySelector<HTMLElement>('[data-edge]');
+  const fab = document.querySelector<HTMLElement>('[data-fab]');
+  const toast = document.querySelector<HTMLElement>('[data-toast]');
+  let toastTimer: number | undefined;
+
+  function showToast(message: string) {
+    if (!toast) return;
+    toast.textContent = message;
+    toast.setAttribute('data-visible', '');
+    window.clearTimeout(toastTimer);
+    toastTimer = window.setTimeout(() => toast.removeAttribute('data-visible'), 2200);
+  }
+
+  const onScroll = () => {
+    const show = window.scrollY > 480;
+    edge?.toggleAttribute('data-visible', show);
+    fab?.toggleAttribute('data-visible', show);
+  };
+  window.addEventListener('scroll', onScroll, { passive: true });
+  onScroll();
+
+  document.querySelectorAll('[data-to-top]').forEach((btn) =>
+    btn.addEventListener('click', () => {
+      window.scrollTo({ top: 0, behavior: prefersReducedMotion() ? 'auto' : 'smooth' });
+      document.querySelector<HTMLElement>('.lockup')?.focus({ preventScroll: true });
+    }),
+  );
+
+  document.querySelector('[data-share]')?.addEventListener('click', async () => {
+    const data = { title: document.title, url: location.href.split('#')[0] };
+    if (navigator.share) {
+      try {
+        await navigator.share(data);
+      } catch {
+        /* partage annulé */
+      }
+      return;
+    }
+    try {
+      await navigator.clipboard.writeText(data.url);
+      showToast('Lien copié');
+    } catch {
+      showToast('Copie impossible : copiez l’adresse depuis la barre du navigateur');
+    }
+  });
+</script>

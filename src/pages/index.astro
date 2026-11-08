@@ -1,0 +1,77 @@
+---
+/**
+ * Squelette (étape 3) : les six fenêtres du bureau, dans l'ordre du brief.
+ * Les zones hachurées marquent ce qui sera construit aux étapes suivantes.
+ */
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Window from '../components/shell/Window.astro';
+import { windows } from '../data/windows';
+
+const byId = Object.fromEntries(windows.map((w) => [w.id, w]));
+
+const plan: Record<string, { title: string; lede: string; blocks: 'bars' | 'block' | 'grid' }> = {
+  currently: {
+    title: 'Currently',
+    lede: 'Le focus professionnel du moment et la trajectoire depuis les études d’architecture.',
+    blocks: 'bars',
+  },
+  about: {
+    title: 'Hello, I’m Youcef',
+    lede: 'Photo, présentation, vision et parcours hybride architecture → logiciel.',
+    blocks: 'block',
+  },
+  services: {
+    title: 'Services',
+    lede: 'Conception architecturale, développement web full stack, et un troisième service à définir.',
+    blocks: 'grid',
+  },
+  realisations: {
+    title: 'Réalisations',
+    lede: 'Projets de développement, d’architecture et de recherche, avec filtres par discipline, type et stack.',
+    blocks: 'grid',
+  },
+  dashboard: {
+    title: 'Dashboard',
+    lede: 'Stacks, environnements, IA et apprentissage : radar concentrique, jauges et roadmap.',
+    blocks: 'block',
+  },
+  cv: {
+    title: 'CV',
+    lede: 'Deux versions à consulter ou télécharger : ATS (texte sobre) et mise en page graphique.',
+    blocks: 'bars',
+  },
+};
+---
+
+<BaseLayout>
+  {
+    windows.map((w) => {
+      const p = plan[w.id]!;
+      return (
+        <Window window={byId[w.id]!} title={p.title}>
+          <h2 id={`${w.id}-title`} class="win-title">
+            {p.title}
+          </h2>
+          <p class="win-lede">{p.lede}</p>
+          <div class="hatch" aria-hidden="true">
+            {p.blocks === 'bars' && (
+              <>
+                <div class="hatch-bar" style="width: 72%" />
+                <div class="hatch-bar" style="width: 58%" />
+                <div class="hatch-bar" style="width: 64%" />
+              </>
+            )}
+            {p.blocks === 'block' && <div class="hatch-block" />}
+            {p.blocks === 'grid' && (
+              <div class="grid gap-3 sm:grid-cols-3">
+                <div class="hatch-block" />
+                <div class="hatch-block" />
+                <div class="hatch-block" />
+              </div>
+            )}
+          </div>
+        </Window>
+      );
+    })
+  }
+</BaseLayout>
